@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+<!-- page content -->
+{% block content %}
+<!-- home page  -->
+
+<!-- banner section -->
+<div class=" d-flex flex-wrap p-5 m-4 align-items-center ">
+
+    <div class="col-6 p-2">
+        <h1>Welcome to Car House</h1>
+        <p>Buy your dream car from us</p>
+    </div>
+    <div class="col-6 p-2">
+        <img src="{% static 'header.jpeg' %}" />
+    </div>
+</div>
+
+<!-- brand category  -->
+<div>
+    <div class="d-flex justify-content-center mt-5">
+        <div class="row ">
+            {% for cat in category %}
+            <div class="col-2 m-2">
+                <a href="{% url 'category_wise_post' cat.slug %}"
+                    class="p-3 border text-center text-decoration-none text-dark fw-bolder ">
+                    {{cat.name}}</a>
+
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+    <!-- detail card -->
+    <div class="col-10 container">
+        <div class="d-flex flex-wrap justify-content-center px-5 pt-5">
+            {% if selected_category_slug %}
+            <h5 class="text-dark fw-bolder"> Total products:{{ data | length }}</h5>
+            {% endif %}
+            {% for post in data %}
+            <div class="col-sm-3">
+                <div class="card m-2">
+                    <div class="card-body">
+                        <img src="{{post.image.url}}" class="card-img-top" alt="">
+                        <h5 class="card-title"><a class="text-decoration-none text-dark">{{post.title}}</a></h5>
+                        <p class="card-text">{{post.content |truncatewords:10}}</p>
+                        <p>Price: {{post.price}}</p>
+                        <p>
+                            Brand: {% for cat in post.category.all %}
+                            <button class="btn btn-primary btn-sm m-2" disabled>
+                                {{cat.name}}
+                            </button>
+                            <a class="btn btn-outline-info" href="{% url 'detail_post' post.id %}">View
+                                details</a>
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
